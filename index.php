@@ -242,10 +242,10 @@ $nombres = null;
                             <div class="3u">
                                 <a target="popup" onclick="popup();" class="button" style="font-size: 11pt;">Verificar si está registrado</a>
                             </div>
-                            <div class="4u"><input id="per_id" type="text" class="text" name="per_id" placeholder="Identificación" /></div>
+                            <div class="4u"><input id="per_id" type="text" class="text" name="per_id" placeholder="Identificación" required="required" /></div>
                             <p class="line">__________________________________________________________________________</p><br>
-                            <div class="4u"><input id="per_nombre" type="text" class="text" name="per_nombre" placeholder="Nombre" /></div>
-                            <div class="4u"><input id="per_apellido1" type="text" class="text" name="per_apellido1" placeholder="Primer apellido" /></div>
+                            <div class="4u"><input id="per_nombre" type="text" class="text" name="per_nombre" placeholder="Nombre" required="required" /></div>
+                            <div class="4u"><input id="per_apellido1" type="text" class="text" name="per_apellido1" placeholder="Primer apellido" required="required"/></div>
                             <div class="4u"><input id="per_apellido2" type="text" class="text" name="per_apellido2" placeholder="Segundo apellido" /></div>
                             <p class="line">__________________________________________________________________________</p><br>
 
@@ -260,7 +260,7 @@ $nombres = null;
                                 </select>
                             </div>
                             <div class="3u">
-                                <select id="mat_programa" class="text" name="mat_programa" placeholder="Programa">
+                                <select id="mat_programa" class="text" name="mat_programa" placeholder="Programa" required="required">
                                     <option value="">Programa</option>
                                     <?php
                                     $res = $command->extraerListas(1);
@@ -273,7 +273,7 @@ $nombres = null;
                                 </select>
                             </div>
                             <div class="2u">
-                                <select id="nov_codigo" type="text" class="text" name="nov_codigo" placeholder="Código novedad">
+                                <select id="nov_codigo" type="text" class="text" name="nov_codigo" placeholder="Código novedad" required="required">
                                     <option value="">Tipo de novedad</option>
                                     <?php
                                     $res = $command->extraerListas(2);
