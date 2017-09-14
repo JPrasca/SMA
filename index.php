@@ -92,9 +92,13 @@ $ubicacion = null;
             }
 
             function initMap() {
+                var lat = document.getElementById('latitude').value;
+                var lon = document.getElementById('longitude').value;
+                var latlng = {lat: parseFloat(lat), lng: parseFloat(lon)};
+
                 var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 8,
-                    center: {lat: 40.731, lng: -73.997}
+                    zoom: 12,
+                    center: latlng
                 });
                 var geocoder = new google.maps.Geocoder;
                 var infowindow = new google.maps.InfoWindow;
@@ -138,7 +142,7 @@ $ubicacion = null;
 
                 geocoder.geocode({'location': latlng}, function (results, status) {
                     if (status === 'OK') {
-                        if (results[1]) {
+                        if (results[0]) {
                             map.setZoom(11);
                             var marker = new google.maps.Marker({
                                 position: latlng,
@@ -157,6 +161,13 @@ $ubicacion = null;
             }
 
         </script>
+        <style>
+            #map {                
+                height: 300px;
+                width: 100%;
+                allowfullscreen;
+            }
+        </style>
     </head>
     <body id="todo" onload="requestPosition(); initMap();">
 
@@ -217,6 +228,7 @@ $ubicacion = null;
 
             <!-- registro -->
             <section id="registro" class="two">
+            <div id="map"></div>
                 <div class="container">
                     <header>
                         <h2>Nuevo estudiante</h2>
@@ -371,7 +383,7 @@ $ubicacion = null;
             </section>
 
         </div>
-        <div id="map" style="display: none;"></div>
+        <!--<div id="map" style="display: none;"></div>-->
 
     </body>
 
