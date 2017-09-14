@@ -146,7 +146,7 @@ $command = new ManejoDatos();
                 <!-- Logo -->
                 <div id="logo">
                     <span class="image avatar48"><img src="images/avatar.jpg" alt="" /></span>
-                    <h1 id="title">Usiario N/A</h1>
+                    <h1 id="title">Usuario N/A</h1>
                     <span class="byline">Usuario predeterminado</span>
                 </div>
 
@@ -222,8 +222,10 @@ $command = new ManejoDatos();
                                     <option value="">Programa</option>
                                     <?php
                                     $res = $command->extraerListas(1);
-                                    while ($row = $command->comprobarContenido($res)) {
-                                        echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+                                    $i = 0;
+                                    while ($i < count($res)) {
+                                        echo "<option value='".$res[$i]["id"]."'>".$res[$i]["nombre"]."</option>";
+                                        $i++;
                                     }
                                     ?>
                                 </select>
@@ -231,7 +233,14 @@ $command = new ManejoDatos();
                             <div class="2u">
                                 <select id="nov_codigo" type="text" class="text" name="nov_codigo" placeholder="Código novedad">
                                     <option value="">Tipo de novedad</option>
-                                    <option value=""></option>
+                                    <?php
+                                    $res = $command->extraerListas(2);
+                                    $i = 0;
+                                    while ($i < count($res)) {
+                                        echo "<option value='".$res[$i]["id"]."'>".$res[$i]["nombre"]."</option>";
+                                        $i++;
+                                    }
+                                    ?>
                                 </select>
                             </div>
 
