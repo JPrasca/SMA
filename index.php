@@ -1,6 +1,7 @@
 <?php
 include 'class/ManejoDatos.php';
 $command = new ManejoDatos();
+$ubicacion = null;
 ?>
 <!DOCTYPE HTML>
 <!--
@@ -17,13 +18,15 @@ $command = new ManejoDatos();
         <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600" rel="stylesheet" type="text/css" />
         <!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
         <script src="js/jquery.min.js"></script>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>-->
         <script src="js/skel.min.js"></script>
         <script src="js/skel-panels.min.js"></script>
         <script src="js/init.js"></script>
         <script src="reports/Highcharts-4.1.5/js/highcharts.js"></script>
         <script src="reports/Highcharts-4.1.5/js/modules/exporting.js"></script>
-
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACJapLIVhm-uVWitwICh24232jYdkP1SQ">
+        </script>
+        
         <noscript>
         <link rel="stylesheet" href="css/skel-noscript.css" />
         <link rel="stylesheet" href="css/style.css" />
@@ -45,16 +48,16 @@ $command = new ManejoDatos();
             var nav = null;
 
             function requestPosition() {
-                if (nav == null) {
+                if (nav === null) {
                     nav = window.navigator;
                 }
 
                 var geoloc = nav.geolocation;
-                if (geoloc != null) {
+                if (geoloc !== null) {
                     geoloc.getCurrentPosition(successCallback, errorCallback);
                 }
-
-                initMap();
+                
+               
             }
 
             function successCallback(position) {
@@ -62,7 +65,7 @@ $command = new ManejoDatos();
                         position.coords.latitude;
                 document.getElementById("longitude").value =
                         position.coords.longitude;
-
+                
             }
 
             function errorCallback(error) {
@@ -88,8 +91,7 @@ $command = new ManejoDatos();
 
                 document.getElementById("status").innerHTML = strMessage;
             }
-        </script>
-        <script type='text/javascript'>
+        
             function initMap() {
                 var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 8,
@@ -97,20 +99,43 @@ $command = new ManejoDatos();
                 });
                 var geocoder = new google.maps.Geocoder;
                 var infowindow = new google.maps.InfoWindow;
-
-                document.getElementById('submit').addEventListener('click', function () {
+                
+                
+                document.getElementById('btn_loc').addEventListener('click', function () {
+                    //console.log('Casi se activa el click');
                     geocodeLatLng(geocoder, map, infowindow);
                 });
+                
+                document.getElementById('btn_abajo').addEventListener('click', function () {
+                    //console.log('Casi se activa el click');
+                    geocodeLatLng(geocoder, map, infowindow);
+                });
+                
+                document.getElementById('top-link').addEventListener('click', function () {
+                    //console.log('Casi se activa el click');
+                    geocodeLatLng(geocoder, map, infowindow);
+                });
+                
+                document.getElementById('info-link').addEventListener('click', function () {
+                    //console.log('Casi se activa el click');
+                    geocodeLatLng(geocoder, map, infowindow);
+                });
+                
+                document.getElementById('registro-link').addEventListener('click', function () {
+                    //console.log('Casi se activa el click');
+                    geocodeLatLng(geocoder, map, infowindow);
+                });
+                
             }
 
             function geocodeLatLng(geocoder, map, infowindow) {
 
                 var lat = document.getElementById('latitude').value;
                 var lon = document.getElementById('longitude').value;
-
-
+                
+                
                 var latlng = {lat: parseFloat(lat), lng: parseFloat(lon)};
-                alert(latlng.toString());
+                
                 geocoder.geocode({'location': latlng}, function (results, status) {
                     if (status === 'OK') {
                         if (results[1]) {
@@ -121,12 +146,12 @@ $command = new ManejoDatos();
                             });
                             infowindow.setContent(results[1].formatted_address);
                             infowindow.open(map, marker);
-                            alert("Estas en " + results[3].formatted_address);
+                            document.getElementById('country').innerHTML = results[3].formatted_address;
                         } else {
-                            window.alert('No results found');
+                            console.log('No results found');
                         }
                     } else {
-                        window.alert('Geocoder failed due to: ' + status);
+                       console.log('Geocoder failed due to: ' + status);
                     }
                 });
             }
@@ -138,6 +163,7 @@ $command = new ManejoDatos();
         <!-- Header -->
         <input type="text" id="latitude" style="display: none;" />
         <input type ="text" id="longitude" style="display: none;"/>
+        
         <div id="status" style="display: none;"> </div><br />
         <div id="header" class="skel-panels-fixed">
 
@@ -148,15 +174,16 @@ $command = new ManejoDatos();
                     <span class="image avatar48"><img src="images/avatar.jpg" alt="" /></span>
                     <h1 id="title">Usuario N/A</h1>
                     <span class="byline">Usuario predeterminado</span>
+                    <label class="byline" type="text" id="country" value=""></label>
                 </div>
 
                 <!-- Nav -->
                 <nav id="nav">
 
                     <ul>
-                        <li><a href="#top" id="top-link" class="skel-panels-ignoreHref"><span class="fa fa-home">Inicio</span></a></li>
-                        <li><a href="#registro" id="registro-link" class="skel-panels-ignoreHref"><span class="fa fa-user">Registro y matrículas</span></a></li>
-                        <li><a href="#about" id="about-link" class="skel-panels-ignoreHref"><span class="fa fa-th">Información</span></a></li>
+                        <li><a href="#top" id="top-link" class="skel-panels-ignoreHref" onclick="initMap();"><span class="fa fa-home">Inicio</span></a></li>
+                        <li><a href="#registro" id="registro-link" class="skel-panels-ignoreHref" onclick="initMap();"><span class="fa fa-user">Registro y matrículas</span></a></li>
+                        <li><a href="#information" id="info-link" class="skel-panels-ignoreHref"><span class="fa fa-th" onclick="initMap();">Información</span></a></li>
 <!--                        <li><a href="#contact" id="contact-link" class="skel-panels-ignoreHref"><span class="fa fa-envelope">Contact</span></a></li>-->
                     </ul>
                 </nav>
@@ -176,13 +203,13 @@ $command = new ManejoDatos();
                     <a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
 
                     <header>
-                        <h2 class="alt">Bienvenid@ al <strong>Sistema</strong></a>.</h2>
+                        <h2 class="alt">Bienvenid@ al <strong>Sistema</strong>.</h2>
                     </header>
 
                     <p>Esto es un proyecto para la asignatura de Inteligencia Artificial de la Universidad de Cartagena correspondiente a un breve análisis simulado de matrículas y deserción de estudiantes teniendo a su ubicación.</p>
                     desarrollado por <strong>Jesús David Prasca</strong>, <strong>Inka Luhrs </strong>, <strong> David Garcés</strong>, y <strong>Deimer Romero</strong>
                     <footer>
-                        <a href="#registro" class="button scrolly">Mas abajo</a>
+                        <a id="btn_abajo" href="#registro" class="button scrolly" onclick="initMap();">Mas abajo</a>
                     </footer>
 
                 </div>
@@ -252,7 +279,8 @@ $command = new ManejoDatos();
 
                             <div class="row">
                                 <div class="10u" style="height: 96px; width: 240px;">
-                                    <a href="#" onclick="initMap();" id="submit" class="button submit">Continuar</a>
+                                    <!--<a href="#registro" onclick="initMap();" id="getLoc" class="button submit">Continuar</a>-->
+                                    <input type="button" onclick="initMap();" id="btn_loc" class="button sumit" value="YA"/>
                                 </div>
                             </div>
                         </div>
@@ -262,7 +290,7 @@ $command = new ManejoDatos();
             </section>
 
 
-            <section id="about" class="three">
+            <section id="information" class="three">
                 <div class="container">
 
                     <header>
@@ -277,7 +305,7 @@ $command = new ManejoDatos();
                                     plotShadow: false
                                 },
                                 title: {
-                                    text: 'Población de estudiantes'
+                                    text: 'Población estudiantil matriculada'
                                 },
                                 tooltip: {
                                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -297,7 +325,7 @@ $command = new ManejoDatos();
                                 },
                                 series: [{
                                         type: 'pie',
-                                        name: 'Indices',
+                                        name: 'índice',
 
                                         data: [
                                         <?php
@@ -321,8 +349,8 @@ $command = new ManejoDatos();
                         $acumulador2 = 0;
 
                         while ($res = $command->comprobarContenido($resultset)) {
-                            echo "Del programa de <strong>" . $res['prog_nombre'] . "</strong>";
-                            echo " hay <strong>" . $res['MATRICULADOS'] . "</strong> estudiantes matriculados y <strong>" . $res['NO_MATRICULADOS'] . "</strong> aún no se matriculan<br>";
+                            //echo "Del programa de <strong>" . $res['prog_nombre'] . "</strong>";
+                            //echo " hay <strong>" . $res['MATRICULADOS'] . "</strong> estudiantes matriculados y <strong>" . $res['NO_MATRICULADOS'] . "</strong> aún no se matriculan<br>";
 
                             $acumulador+=$res['MATRICULADOS'];
                             $acumulador2+=$res['NO_MATRICULADOS'];
@@ -345,9 +373,7 @@ $command = new ManejoDatos();
 
         </div>
         <div id="map" style="display: none;"></div>
-        <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACJapLIVhm-uVWitwICh24232jYdkP1SQ&callback=initMap">
-        </script>
+        
     </body>
 
 </html>
