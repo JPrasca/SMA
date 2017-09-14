@@ -1,10 +1,14 @@
 <?php
-$con = mysqli_connect("localhost","root","", "matriculas_ai");
 
-$sql=mysqli_query($con, "select * from ver_total_novedades");
+include '../class/ManejoDatos.php';
+$command = new ManejoDatos();
+
+//$con = mysqli_connect("localhost","root","", "matriculas_ai");
+
+$sql=$command->ejecutarConsultaX("select * from ver_total_novedades");
 $aux = null;
 
-while($res=mysqli_fetch_array($sql)){
+while($res=$command->comprobarContenido($sql)){
     $aux['SIN_NOVEDAD'] = $res['SIN_NOVEDAD'];
     $aux['SERVICIOS_PUBLICOS'] = $res['SERVICIOS_PUBLICOS'];
      $aux['SEGURIDAD'] = $res['SEGURIDAD'];

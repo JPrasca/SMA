@@ -1,13 +1,13 @@
 <?php
-    
-	$con = mysqli_connect("localhost","root","", "matriculas_ai");
-
+include '../class/ManejoDatos.php';
+$command = new ManejoDatos();
+$count = 0;
 ?>
 <!DOCTYPE HTML>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Indice de deserción</title>
+		<title>Matriculados vs No matriculados por municipio</title>
 
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		
@@ -24,8 +24,8 @@ $(function () {
             text: ''
         },
         xAxis: {
-            categories: [ <?php $sql=mysqli_query($con, "SELECT * FROM no_matriculados_por_mun");
-                while($res=mysqli_fetch_array($sql)){ ?>			
+            categories: [ <?php $sql = $command->ejecutarConsultaX("SELECT * FROM no_matriculados_por_mun");
+                while($res = $command->comprobarContenido($sql)){ ?>			
                 ['<?php echo $res['mun_nombre'] ?>'], <?php } ?>
             ],
             title: {
@@ -68,15 +68,22 @@ $(function () {
         },
         series: [{
             name: 'Matriculados',
-            data: [ <?php $sql=mysqli_query($con, "SELECT * FROM no_matriculados_por_mun"); 
-                        while($res=mysqli_fetch_assoc($sql)){ ?>			
-			[<?php echo $res['MATRICULADOS'] ?>], <?php } ?>			
+            data: [ 
+                <?php 
+                $sql = $command->ejecutarConsultaX("SELECT * FROM no_matriculados_por_mun"); 
+                while($res = $command->comprobarContenido($sql)){ ?>			
+		[<?php echo $res['MATRICULADOS'] ?>], <?php 
+                    $count+=$res['MATRICULADOS'];
+                } ?>			
             ]
         }, {
             name: 'No matriculados',
-            data: [ <?php $sql=mysqli_query($con, "SELECT * FROM no_matriculados_por_mun"); 
-                    while($res=mysqli_fetch_assoc($sql)){ ?>			
-                    [<?php echo $res['NO_MATRICULADOS'] ?>], <?php } ?>			
+            data: [ 
+                <?php $sql = $command->ejecutarConsultaX("SELECT * FROM no_matriculados_por_mun"); 
+                while($res = $command->comprobarContenido($sql)){ ?>			
+                [<?php echo $res['NO_MATRICULADOS'] ?>], <?php 
+                    $count+=$res['NO_MATRICULADOS'];
+                } ?>			
             ]
         }]
     });

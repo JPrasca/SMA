@@ -1,7 +1,7 @@
 <?php
 
-    $con = mysqli_connect("localhost","root","", "matriculas_ai");
-
+include '../class/ManejoDatos.php';
+$command = new ManejoDatos();
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -24,8 +24,8 @@ $(function () {
             text: ''
         },
         xAxis: {
-            categories: [ <?php $sql=mysqli_query($con, "SELECT * FROM matriculados_por_prog");
-                while($res=mysqli_fetch_array($sql)){ ?>			
+            categories: [ <?php $sql=$command->ejecutarConsultaX("SELECT * FROM matriculados_por_prog");
+                while($res=$command->comprobarContenido($sql)){ ?>			
                 ['<?php echo $res['prog_nombre'] ?>'], <?php } ?>
             ],
             title: {
@@ -68,14 +68,14 @@ $(function () {
         },
         series: [{
             name: 'Matriculados',
-            data: [ <?php $sql=mysqli_query($con, "SELECT * FROM matriculados_por_prog"); 
-                        while($res=mysqli_fetch_assoc($sql)){ ?>			
+            data: [ <?php $sql=$command->ejecutarConsultaX("SELECT * FROM matriculados_por_prog"); 
+                        while($res=$command->comprobarContenido($sql)){ ?>			
 			[<?php echo $res['MATRICULADOS'] ?>], <?php } ?>			
             ]
         }, {
             name: 'No matriculados',
-            data: [ <?php $sql=mysqli_query($con, "SELECT * FROM matriculados_por_prog"); 
-                    while($res=mysqli_fetch_assoc($sql)){ ?>			
+            data: [ <?php $sql=$command->ejecutarConsultaX("SELECT * FROM matriculados_por_prog"); 
+                    while($res=$command->comprobarContenido($sql)){ ?>			
                     [<?php echo $res['NO_MATRICULADOS'] ?>], <?php } ?>			
             ]
         }]

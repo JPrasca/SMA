@@ -26,7 +26,7 @@ $ubicacion = null;
         <script src="reports/Highcharts-4.1.5/js/modules/exporting.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACJapLIVhm-uVWitwICh24232jYdkP1SQ">
         </script>
-        
+
         <noscript>
         <link rel="stylesheet" href="css/skel-noscript.css" />
         <link rel="stylesheet" href="css/style.css" />
@@ -38,7 +38,7 @@ $ubicacion = null;
         <script type="text/javascript">
             function popup()
             {
-                parametro = window.open('/SMA/view_old_student.php?ID=' + document.getElementById('per_id').value, '', 'top=300,left=300,width=300,height=300');
+                parametro = window.open('/SMA/view_old_student.php?ID=' + document.getElementById('per_id').value, '', 'width=400px,height=600px');
                 parametro.document.getElementById('formSearch').value = "nombres";
 
             }
@@ -56,16 +56,15 @@ $ubicacion = null;
                 if (geoloc !== null) {
                     geoloc.getCurrentPosition(successCallback, errorCallback);
                 }
-                
-               
+
             }
 
             function successCallback(position) {
-                document.getElementById("latitude").value =
+                document.getElementById("latitude").value = 
                         position.coords.latitude;
-                document.getElementById("longitude").value =
+                document.getElementById("longitude").value = 
                         position.coords.longitude;
-                
+                        
             }
 
             function errorCallback(error) {
@@ -91,7 +90,7 @@ $ubicacion = null;
 
                 document.getElementById("status").innerHTML = strMessage;
             }
-        
+
             function initMap() {
                 var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 8,
@@ -99,43 +98,44 @@ $ubicacion = null;
                 });
                 var geocoder = new google.maps.Geocoder;
                 var infowindow = new google.maps.InfoWindow;
-                
-                
+
+
                 document.getElementById('btn_loc').addEventListener('click', function () {
                     //console.log('Casi se activa el click');
                     geocodeLatLng(geocoder, map, infowindow);
                 });
-                
+
                 document.getElementById('btn_abajo').addEventListener('click', function () {
                     //console.log('Casi se activa el click');
                     geocodeLatLng(geocoder, map, infowindow);
                 });
-                
+
                 document.getElementById('top-link').addEventListener('click', function () {
                     //console.log('Casi se activa el click');
                     geocodeLatLng(geocoder, map, infowindow);
                 });
-                
+
                 document.getElementById('info-link').addEventListener('click', function () {
                     //console.log('Casi se activa el click');
                     geocodeLatLng(geocoder, map, infowindow);
                 });
-                
+
                 document.getElementById('registro-link').addEventListener('click', function () {
                     //console.log('Casi se activa el click');
                     geocodeLatLng(geocoder, map, infowindow);
                 });
-                
+
+
             }
 
             function geocodeLatLng(geocoder, map, infowindow) {
 
                 var lat = document.getElementById('latitude').value;
                 var lon = document.getElementById('longitude').value;
-                
-                
+
+
                 var latlng = {lat: parseFloat(lat), lng: parseFloat(lon)};
-                
+
                 geocoder.geocode({'location': latlng}, function (results, status) {
                     if (status === 'OK') {
                         if (results[1]) {
@@ -146,24 +146,24 @@ $ubicacion = null;
                             });
                             infowindow.setContent(results[1].formatted_address);
                             infowindow.open(map, marker);
-                            document.getElementById('country').innerHTML = results[3].formatted_address;
+                            document.getElementById('country').innerHTML = results[2].formatted_address;
                         } else {
                             console.log('No results found');
                         }
                     } else {
-                       console.log('Geocoder failed due to: ' + status);
+                        console.log('Geocoder failed due to: ' + status);
                     }
                 });
             }
 
         </script>
     </head>
-    <body onload="requestPosition();">
+    <body id="todo" onload="requestPosition(); initMap();">
 
         <!-- Header -->
         <input type="text" id="latitude" style="display: none;" />
         <input type ="text" id="longitude" style="display: none;"/>
-        
+
         <div id="status" style="display: none;"> </div><br />
         <div id="header" class="skel-panels-fixed">
 
@@ -222,7 +222,7 @@ $ubicacion = null;
                         <h2>Nuevo estudiante</h2>
                     </header>
 
-                    <form name="fromNew" enctype="multipart/form-data" method="post" action="#">
+                    <form name="formNew" enctype="multipart/form-data" method="post" action="#">
                         <div class="row half">
                             <div class="3u">
                                 <a target="popup" onclick="popup();" class="button" style="font-size: 11pt;">Verificar si está registrado</a>
@@ -251,7 +251,7 @@ $ubicacion = null;
                                     $res = $command->extraerListas(1);
                                     $i = 0;
                                     while ($i < count($res)) {
-                                        echo "<option value='".$res[$i]["id"]."'>".$res[$i]["nombre"]."</option>";
+                                        echo "<option value='" . $res[$i]["id"] . "'>" . $res[$i]["nombre"] . "</option>";
                                         $i++;
                                     }
                                     ?>
@@ -264,7 +264,7 @@ $ubicacion = null;
                                     $res = $command->extraerListas(2);
                                     $i = 0;
                                     while ($i < count($res)) {
-                                        echo "<option value='".$res[$i]["id"]."'>".$res[$i]["nombre"]."</option>";
+                                        echo "<option value='" . $res[$i]["id"] . "'>" . $res[$i]["nombre"] . "</option>";
                                         $i++;
                                     }
                                     ?>
@@ -280,7 +280,7 @@ $ubicacion = null;
                             <div class="row">
                                 <div class="10u" style="height: 96px; width: 240px;">
                                     <!--<a href="#registro" onclick="initMap();" id="getLoc" class="button submit">Continuar</a>-->
-                                    <input type="button" onclick="initMap();" id="btn_loc" class="button sumit" value="YA"/>
+                                    <input type="submit" onclick="initMap(); " id="btn_loc" class="button sumit" value="Registrar"/>
                                 </div>
                             </div>
                         </div>
@@ -326,13 +326,12 @@ $ubicacion = null;
                                 series: [{
                                         type: 'pie',
                                         name: 'índice',
-
                                         data: [
-                                        <?php
-                                        $result = $command->ejecutarConsultaX("SELECT * FROM matriculados_por_prog");
-                                        while ($row = $command->comprobarContenido($result)) {
-                                            ?>['<?php echo $row['prog_nombre'] ?>', <?php echo $row['MATRICULADOS'] ?>],
-                                        <?php } ?>
+                                            <?php
+                                            $result = $command->ejecutarConsultaX("SELECT * FROM matriculados_por_prog");
+                                            while ($row = $command->comprobarContenido($result)) {
+                                                ?>['<?php echo $row['prog_nombre'] ?>', <?php echo $row['MATRICULADOS'] ?>],
+                                            <?php } ?>
 
                                         ]
                                     }]
@@ -373,7 +372,7 @@ $ubicacion = null;
 
         </div>
         <div id="map" style="display: none;"></div>
-        
+
     </body>
 
 </html>
