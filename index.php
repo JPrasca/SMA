@@ -2,13 +2,11 @@
 include 'class/ManejoDatos.php';
 $command = new ManejoDatos();
 $ubicacion = null;
+$nombres = null;
+
 ?>
 <!DOCTYPE HTML>
-<!--
-        Prologue 1.2 by HTML5 UP
-        html5up.net | @n33co
-        Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
+
 <html>
     <head>
         <title>Sistema de matrículas</title>
@@ -36,11 +34,14 @@ $ubicacion = null;
         <!--[if lte IE 8]><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
 
         <script type="text/javascript">
+            var lugar = "";
             function popup()
             {
-                parametro = window.open('/SMA/view_old_student.php?ID=' + document.getElementById('per_id').value, '', 'width=400px,height=600px');
-                parametro.document.getElementById('formSearch').value = "nombres";
-
+                lugar = lugar.split(",")[1];
+                parametro = window.open('/SMA/view_old_student.php?ID=' + document.getElementById('per_id').value + '&country=' + 
+                        lugar.trim(), '', 'width=400px,height=600px');
+                
+                
             }
         </script>
 
@@ -151,6 +152,8 @@ $ubicacion = null;
                             infowindow.setContent(results[1].formatted_address);
                             infowindow.open(map, marker);
                             document.getElementById('country').innerHTML = results[2].formatted_address;
+                            lugar = results[2].formatted_address;
+                            console.log(lugar);
                         } else {
                             console.log('No results found');
                         }
@@ -185,7 +188,7 @@ $ubicacion = null;
                     <span class="image avatar48"><img src="images/avatar.jpg" alt="" /></span>
                     <h1 id="title">Usuario N/A</h1>
                     <span class="byline">Usuario predeterminado</span>
-                    <label class="byline" type="text" id="country" value=""></label>
+                    <label class="byline" type="text" id="country" name="country" value=""></label>
                 </div>
 
                 <!-- Nav -->
@@ -234,7 +237,7 @@ $ubicacion = null;
                         <h2>Nuevo estudiante</h2>
                     </header>
 
-                    <form name="formNew" enctype="multipart/form-data" method="post" action="#">
+                    <form name="formNew" enctype="multipart/form-data" method="post" action="view_new_student.php">
                         <div class="row half">
                             <div class="3u">
                                 <a target="popup" onclick="popup();" class="button" style="font-size: 11pt;">Verificar si está registrado</a>
@@ -340,10 +343,14 @@ $ubicacion = null;
                                         name: 'índice',
                                         data: [
                                             <?php
+                                            $j = 0;
                                             $result = $command->ejecutarConsultaX("SELECT * FROM matriculados_por_prog");
                                             while ($row = $command->comprobarContenido($result)) {
                                                 ?>['<?php echo $row['prog_nombre'] ?>', <?php echo $row['MATRICULADOS'] ?>],
-                                            <?php } ?>
+                                            <?php 
+                                                $nombres[$j] = $row['prog_nombre'];
+                                                $j++;
+                                            } ?>
 
                                         ]
                                     }]
@@ -358,13 +365,14 @@ $ubicacion = null;
                         $resultset = $command->ejecutarConsultaX("SELECT * FROM matriculados_por_prog");
                         $acumulador = 0;
                         $acumulador2 = 0;
-
+                        $contador = 0;
                         while ($res = $command->comprobarContenido($resultset)) {
                             //echo "Del programa de <strong>" . $res['prog_nombre'] . "</strong>";
                             //echo " hay <strong>" . $res['MATRICULADOS'] . "</strong> estudiantes matriculados y <strong>" . $res['NO_MATRICULADOS'] . "</strong> aún no se matriculan<br>";
 
                             $acumulador+=$res['MATRICULADOS'];
                             $acumulador2+=$res['NO_MATRICULADOS'];
+                            $contador++;
                         }
 
                         echo "<br> Para un total de <strong>" . $acumulador . "</strong> estudiantes matriculados y <strong>" . $acumulador2 . "</strong> no matriculados";
@@ -373,11 +381,24 @@ $ubicacion = null;
                     </p>
                     <div class="row">
                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_mat_x_mun.php', this.target, 'width=1024px,height=600px');
-                                return false;">Posibles deserciones por municipio</button> 
+                                return false;">Matriculados y restantes por municipio</button> 
                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_nov_total.php', this.target, 'width=1024px,height=600px');
                                 return false;">Novedades registradas</button> 
                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_mat_x_pro.php', this.target, 'width=1024px,height=600px');
-                                return false;">Programas con posible deserción</button>
+                                return false;">Matriculados y restantes por programa</button>
+                      
+                        <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado1.php', this.target, 'width=1024px,height=600px');
+                                return false;">Listado de matriculados en Civil</button>
+                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado2.php', this.target, 'width=1024px,height=600px');
+                                return false;">Listado de matriculados en Sistemas</button>
+                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado3.php', this.target, 'width=1024px,height=600px');
+                                return false;">Listado de matriculados en Química</button>
+                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado4.php', this.target, 'width=1024px,height=600px');
+                                return false;">Listado de matriculados en Alimentos</button>
+                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado5.php', this.target, 'width=1024px,height=600px');
+                                return false;">Listado de matriculados en Electrónica</button>
+                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado6.php', this.target, 'width=1024px,height=600px');
+                                return false;">Listado de matriculados en Mecánica</button>
                     </div>
                 </div>
             </section>
