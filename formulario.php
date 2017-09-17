@@ -59,7 +59,13 @@ try{
 
             $enlace = $command->ejecutarConsultaX($query);
             //echo $per_nombre." ".$per_apellido1." ".$per_apellido2."</br>".$per_estrato." ".$mat_programa." ".$nov_codigo." ".$nov_detalle."</br>".$country;
-            echo "Actualización exitosa";
+            
+            if($per_id == "" || $per_apellido1 == "" || $mat_programa == ""){
+                echo "Faltan datos necesarios para el registro";
+            }
+            else{
+                echo "Actualización exitosa";
+            }
 
         }  catch (mysqli_sql_exception $ex){
             echo "No se pudo completar la operación. ".$ex->getMessage();

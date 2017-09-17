@@ -157,6 +157,17 @@ $nombres = null;
                 });
             }
 
+            function resetForm(){
+                document.getElementById("per_id").value = "";
+                document.getElementById("per_nombre").value = "";
+                document.getElementById("per_apellido1").value = "";
+                document.getElementById("per_apellido2").value = "";
+                document.getElementById("per_estrato").value = "0";
+                document.getElementById("nov_codigo").value = "0";
+                document.getElementById("nov_detalle").value = "";
+                document.getElementById("mat_programa").value = "0";
+            }
+            
             $(document).on('ready', function () {
                 //alert("document ready");
                 
@@ -238,8 +249,11 @@ $nombres = null;
                         success: function (data)
                     {
                         alert(data);
+                        resetForm();
                     }
                 });
+                
+                
             }
         </script>
         <style>
@@ -296,7 +310,7 @@ $nombres = null;
                     <a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
 
                     <header>
-                        <h2 class="alt">Bienvenid@ al <strong>Sistema</strong>.</h2>
+                        <h2 class="alt">Bienvenid@ al Sistema de matrículas alternativo <strong>SMA</strong>.</h2>
                     </header>
 
                     <p>Esto es un proyecto para la asignatura de Inteligencia Artificial de la Universidad de Cartagena correspondiente a un breve análisis simulado de matrículas y deserción de estudiantes teniendo a su ubicación.</p>
@@ -322,6 +336,7 @@ $nombres = null;
                                 <a target="popup" onclick="buscar();" class="button" style="font-size: 11pt;">Verificar si está registrado</a>
                             </div>
                             <div class="4u"><input id="per_id" type="text" class="text" name="per_id" placeholder="Identificación" required="required" /></div>
+                            
                             <p class="line">__________________________________________________________________________</p><br>
                             <div class="4u"><input id="per_nombre" type="text" class="text" name="per_nombre" placeholder="Nombre" required="required" /></div>
                             <div class="4u"><input id="per_apellido1" type="text" class="text" name="per_apellido1" placeholder="Primer apellido" required="required"/></div>
@@ -375,7 +390,9 @@ $nombres = null;
                                 <div class="10u" style="height: 96px; width: 240px;">
                                     <!--<a href="#registro" onclick="initMap();" id="getLoc" class="button submit">Continuar</a>-->
                                     <input type="button" onclick="initMap(); registrar();" id="btn_loc" class="button sumit" value="Registrar"/>
+                                    
                                 </div>
+                                <input type="button" onclick="resetForm();" id="btn_clr" class="button sumit" value="Limpiar campos"/>
                             </div>
                         </div>
                     </form>

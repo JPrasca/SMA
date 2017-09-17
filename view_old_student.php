@@ -3,27 +3,40 @@ include 'class/ManejoDatos.php';
 
 $command = new ManejoDatos();
 
-
-$lugar = $_GET['country'];
-
-
-$query = "SELECT * "
-        . "FROM personas AS p1, matriculas AS m1, novedades_reg AS n1 "
-        . "WHERE p1.per_id = " . $_GET['per_id'] . " "
-        . "AND p1.per_codigo = m1.mat_estudiante "
-        . "AND m1.mat_estudiante = n1.novr_est ";
-$registro = $command->ejecutarConsultaX($query);
-
-while ($row = $command->comprobarContenido($registro)) {
-    $nombre = $row['per_nombres'];
-    $apellido1 = $row['per_apellido1'];
-    $apellido2 = $row['per_apellido2'];
-    $estrato = $row['per_estrato'];
-    $programa = $row['mat_programa'];
-    $detalle_novedad = $row['novr_detalle'];
-    $codigo_novedad = $row['novr_codigo'];
-    //$municipio = $row['loc_mun'];
+if(isset($_GET["country"])){
+    $lugar = $_GET['country'];
 }
+
+    $nombre = "";
+    $apellido1 = "";
+    $apellido2 = "";
+    $estrato = "";
+    $programa = "";
+    $detalle_novedad = "";
+    $codigo_novedad = "";
+    
+try {
+    
+
+    $query = "SELECT * "
+            . "FROM personas AS p1, matriculas AS m1, novedades_reg AS n1 "
+            . "WHERE p1.per_id = " . $_GET['per_id'] . " "
+            . "AND p1.per_codigo = m1.mat_estudiante "
+            . "AND m1.mat_estudiante = n1.novr_est ";
+    $registro = $command->ejecutarConsultaX($query);
+
+    while ($row = $command->comprobarContenido($registro)) {
+        $nombre = $row['per_nombres'];
+        $apellido1 = $row['per_apellido1'];
+        $apellido2 = $row['per_apellido2'];
+        $estrato = $row['per_estrato'];
+        $programa = $row['mat_programa'];
+        $detalle_novedad = $row['novr_detalle'];
+        $codigo_novedad = $row['novr_codigo'];
+        //$municipio = $row['loc_mun'];
+    }
+    
+   
 ?>
 
 <!DOCTYPE HTML>
@@ -96,6 +109,11 @@ while ($row = $command->comprobarContenido($registro)) {
         </script>
     </head>
     <body >
+        <?php
+        if($nombre == "" || $apellido1 == "" || $programa == ""){
+            echo "<script type='text/javascript'>alert('Este número de identificación no se encuentra registrado');</script>";
+        }
+        ?>
         <input type="text" id="latitude" style="display: none;" />
         <input type ="text" id="longitude" style="display: none;"/>
         <label class="byline" type="text" id="country" name="country" style="display: none;" value=""></label>
@@ -173,5 +191,16 @@ while ($row = $command->comprobarContenido($registro)) {
 
     </body>
 </html>
+    
+<?php
+
+} catch (Exception $exc) {
+    echo "Este documento no se encuentra registrado".$exc->getTraceAsString();
+}
+
+
+?>
+
+
 
 
