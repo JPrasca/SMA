@@ -90,7 +90,7 @@ while ($res = $command->comprobarContenido($sql)) {
 
                     <tr><td><?php echo $aux['ACADEMICA']; ?></td><td><?php echo $aux['ECONOMICA']; ?></td><td><?php echo $aux['SEGURIDAD']; ?></td><td><?php echo $aux['SERVICIOS_PUBLICOS']; ?></td><td><?php echo $aux['SIN_NOVEDAD']; ?></td></tr>
                     <tr><td colspan="5"></td></tr>
-                    <tr><td colspan="2" style="text-align: right"><strong>TOTAL NOVEDADES REGISTRADAS</strong></td><td colspan="3"><?php echo $aux['ACADEMICA'] + $aux['ECONOMICA'] + $aux['SEGURIDAD'] + $aux['SERVICIOS_PUBLICOS'] + $aux['SIN_NOVEDAD']; ?></td></tr>
+                    <tr><td colspan="2" style="text-align: right"><strong>TOTAL REPORTADO</strong></td><td colspan="3"><?php echo $aux['ACADEMICA'] + $aux['ECONOMICA'] + $aux['SEGURIDAD'] + $aux['SERVICIOS_PUBLICOS'] + $aux['SIN_NOVEDAD']; ?></td></tr>
 
                 </tbody>
             </table></div>

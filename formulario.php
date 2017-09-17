@@ -4,9 +4,9 @@ include 'class/ManejoDatos.php';
  
 try{
    
-
-    $per_id = $_POST["per_id"];
-
+    if(isset($_POST["per_id"])){
+        $per_id = $_POST["per_id"];
+    }
 
     $opcion = $_POST['opcion'];
 
@@ -19,7 +19,7 @@ try{
         $nov_codigo = $_POST["nov_codigo"];
         $nov_detalle = $_POST["nov_detalle"];
         $country = trim($_POST["country"]);
-        
+       
         try{
             $query = "SELECT * FROM personas WHERE personas.per_id = '".$per_id."';";
             $enlace = $command->ejecutarConsultaX($query);
@@ -30,7 +30,7 @@ try{
                     "', ".$per_estrato.", ".$mat_programa.",  '".strtoupper($nov_detalle)."', ".$nov_codigo.", '".strtoupper($country)."');";
 
                 $enlace = $command->ejecutarConsultaX($query) or die;
-                echo "Registro exitoso";
+                //echo "Registro exitoso";
 
             }
             else{
@@ -58,7 +58,22 @@ try{
                 "', ".$per_estrato.", ".$mat_programa.",  '".strtoupper($nov_detalle)."', ".$nov_codigo.", '".strtoupper($country)."');";
 
             $enlace = $command->ejecutarConsultaX($query);
+            //echo $per_nombre." ".$per_apellido1." ".$per_apellido2."</br>".$per_estrato." ".$mat_programa." ".$nov_codigo." ".$nov_detalle."</br>".$country;
             echo "Actualización exitosa";
+
+        }  catch (mysqli_sql_exception $ex){
+            echo "No se pudo completar la operación. ".$ex->getMessage();
+        }
+    }
+    else if($opcion == "reiniciar"){
+        try{
+        
+
+            $query = "UPDATE estados_reg SET estados_reg.estr_tipo = 2;";
+
+            $enlace = $command->ejecutarConsultaX($query);
+            //echo $per_nombre." ".$per_apellido1." ".$per_apellido2."</br>".$per_estrato." ".$mat_programa." ".$nov_codigo." ".$nov_detalle."</br>".$country;
+            echo "Ahora todos los estudiantes deben matricularse";
 
         }  catch (mysqli_sql_exception $ex){
             echo "No se pudo completar la operación. ".$ex->getMessage();

@@ -120,7 +120,10 @@ $nombres = null;
                     //console.log('Casi se activa el click');
                     geocodeLatLng(geocoder, map, infowindow);
                 });
-
+                
+                document.getElementById('activar-link').addEventListener('click', function () {
+                    geocodeLatLng(geocoder, map, infowindow);
+                });
 
             }
 
@@ -168,6 +171,22 @@ $nombres = null;
                     }
                 });
             });
+            
+            function reiniciar(){
+                $.ajax({
+                    type: "POST",
+                    url: "formulario.php",
+                    data: {
+                        opcion: "reiniciar"
+                        
+                    },
+                        success: function (data)
+                    {
+                        alert(data);
+                    }
+                });
+            }
+            
             function buscar() {
                 //alert("buscar desde javascript");
                 //alert("id: " + $('#id').val());
@@ -257,7 +276,7 @@ $nombres = null;
                         <li><a href="#top" id="top-link" class="skel-panels-ignoreHref" onclick="initMap();"><span class="fa fa-home">Inicio</span></a></li>
                         <li><a href="#registro" id="registro-link" class="skel-panels-ignoreHref" onclick="initMap();"><span class="fa fa-user">Registro y matrículas</span></a></li>
                         <li><a href="#information" id="info-link" class="skel-panels-ignoreHref"><span class="fa fa-th" onclick="initMap();">Información</span></a></li>
-                        
+                        <li><a href="#" id="activar-link" class="skel-panels-ignoreHref" onclick="reiniciar();"><span class="fa fa-calendar-o" onclick="initMap();">Reiniciar matrículas</span></a></li>
 <!--                        <li><a href="#contact" id="contact-link" class="skel-panels-ignoreHref"><span class="fa fa-envelope">Contact</span></a></li>-->
                     </ul>
                 </nav>
