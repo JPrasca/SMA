@@ -36,9 +36,10 @@ class ManejoDatos {
     }
     
     public function ejecutarConsultaX($query){
-        
+        //$this->abrirConexion();
         $resultset = $this->adminDB->realizar_consulta($query, $this->DB);
-        $this->adminDB->cerrar_conexion();
+        
+        $this->cerrarConexion();
         
         return $resultset;
     }
@@ -55,6 +56,8 @@ class ManejoDatos {
             case 3:
                 $query = "SELECT * FROM municipios;";
                 break;
+            default:
+                $query = "SELECT * FROM abrir_o_cerrar;";
         }        
         $resulSet = $this->adminDB->realizar_consulta($query, $this->DB);
         $arreglo = null;
@@ -74,6 +77,9 @@ class ManejoDatos {
                     $arreglo[$i]["id"] = $row["mun_codigo"];
                     $arreglo[$i]["nombre"] = $row["mun_nombre"];
                     break;
+                default:
+                    $arreglo[$i]["id"] = $row["llave"];
+                    break;
             }
             $i++;
         }
@@ -82,6 +88,20 @@ class ManejoDatos {
     }
     
     public function comprobarContenido($resulset){
+        $this->adminDB->conectar_servidor($this->DB);
         return $this->adminDB->revisar_contenido($resulset);
+        
+    }
+    
+    public function contarRegistros($resulset){
+        return $this->adminDB->contar_registros($resulset);
+    }
+    
+    public function abrirConexion(){
+        $this->adminDB->conectar_servidor($this->DB);
+    }
+    
+    public function cerrarConexion(){
+        $this->adminDB->cerrar_conexion();
     }
 }

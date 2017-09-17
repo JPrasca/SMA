@@ -1,5 +1,6 @@
 <?php
 include 'class/ManejoDatos.php';
+
 $command = new ManejoDatos();
 $ubicacion = null;
 $nombres = null;
@@ -16,6 +17,7 @@ $nombres = null;
         <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600" rel="stylesheet" type="text/css" />
         <!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
         <script src="js/jquery.min.js"></script>
+	<script src="js/jquery.js" type="text/javascript"></script>
         <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>-->
         <script src="js/skel.min.js"></script>
         <script src="js/skel-panels.min.js"></script>
@@ -35,17 +37,6 @@ $nombres = null;
 
         <script type="text/javascript">
             var lugar = "";
-            function popup()
-            {
-                lugar = lugar.split(",")[1];
-                parametro = window.open('/SMA/view_old_student.php?ID=' + document.getElementById('per_id').value + '&country=' + 
-                        lugar.trim(), '', 'width=400px,height=600px');
-                
-                
-            }
-        </script>
-
-        <script type="text/javascript">
             var nav = null;
 
             function requestPosition() {
@@ -163,6 +154,74 @@ $nombres = null;
                 });
             }
 
+            $(document).on('ready', function () {
+                //alert("document ready");
+                
+                $.ajax({
+                    type: "POST",
+                    url: "formulario.php",
+                    data: {"opcion": "buscar"},
+                    success: function (data)
+                    {
+                        //alert(data);
+                      
+                    }
+                });
+            });
+            function buscar() {
+                //alert("buscar desde javascript");
+                //alert("id: " + $('#id').val());
+                lugar = lugar.split(",")[1];
+                $.ajax({
+                    type: "POST",
+                    url: "view_old_student.php",
+                    data: {
+                        opcion: "buscar", per_id: $('#per_id').val(), per_nombre: $('#per_nombre').val(),
+                        per_apellido1: $('#per_apellido1').val(), per_apellido2: $('#per_apellido2').val(),
+                        per_estrato: $('#per_estrato').val(), mat_programa: $('#mat_programa').val(),
+                        nov_codigo:$('#nov_codigo').val(), nov_detalle: $('#nov_detalle').val(),
+                        country: lugar
+                    },
+                    success: function (data)
+                    {
+                        //alert(data);
+                        open('view_old_student.php?per_id=' + $('#per_id').val() + '&country=' + 
+                        lugar.trim(), '', 'width=800px,height=600px');
+                    }
+                });
+            }
+            
+            function registrar() {
+                alert("registrar desde javascript");
+                
+                //alert("nombre: " + $('#firstname').val() + "\napellido: " + $('#lastname').val());
+//                alert($('#per_id').val());
+//                alert($('#per_nombre').val());
+//                alert($('#per_apellido1').val());
+//                alert($('#per_apellido2').val());
+//                alert($('#per_estrato').val());
+//                alert($('#mat_programa').val());
+//                alert($('#nov_codigo').val());
+//                alert($('#nov_detalle').val());
+//                alert(lugar.split(",")[1]);
+                lugar = lugar.split(",")[1];
+                $.ajax({
+                    type: "POST",
+                    url: "formulario.php",
+                    data: {
+                        opcion: "registrar", per_id: $('#per_id').val(), per_nombre: $('#per_nombre').val(),
+                        per_apellido1: $('#per_apellido1').val(), per_apellido2: $('#per_apellido2').val(),
+                        per_estrato: $('#per_estrato').val(), mat_programa: $('#mat_programa').val(),
+                        nov_codigo: $('#nov_codigo').val(), nov_detalle: $('#nov_detalle').val(),
+                        country: lugar
+                        
+                    },
+                        success: function (data)
+                    {
+                        alert(data);
+                    }
+                });
+            }
         </script>
         <style>
             #map {                
@@ -172,7 +231,7 @@ $nombres = null;
             }
         </style>
     </head>
-    <body id="todo" onload="requestPosition(); initMap();">
+    <body id="todo" onload="requestPosition();">
 
         <!-- Header -->
         <input type="text" id="latitude" style="display: none;" />
@@ -198,6 +257,7 @@ $nombres = null;
                         <li><a href="#top" id="top-link" class="skel-panels-ignoreHref" onclick="initMap();"><span class="fa fa-home">Inicio</span></a></li>
                         <li><a href="#registro" id="registro-link" class="skel-panels-ignoreHref" onclick="initMap();"><span class="fa fa-user">Registro y matrículas</span></a></li>
                         <li><a href="#information" id="info-link" class="skel-panels-ignoreHref"><span class="fa fa-th" onclick="initMap();">Información</span></a></li>
+                        
 <!--                        <li><a href="#contact" id="contact-link" class="skel-panels-ignoreHref"><span class="fa fa-envelope">Contact</span></a></li>-->
                     </ul>
                 </nav>
@@ -240,7 +300,7 @@ $nombres = null;
                     <form name="formNew" enctype="multipart/form-data" method="post" action="view_new_student.php">
                         <div class="row half">
                             <div class="3u">
-                                <a target="popup" onclick="popup();" class="button" style="font-size: 11pt;">Verificar si está registrado</a>
+                                <a target="popup" onclick="buscar();" class="button" style="font-size: 11pt;">Verificar si está registrado</a>
                             </div>
                             <div class="4u"><input id="per_id" type="text" class="text" name="per_id" placeholder="Identificación" required="required" /></div>
                             <p class="line">__________________________________________________________________________</p><br>
@@ -295,7 +355,7 @@ $nombres = null;
                             <div class="row">
                                 <div class="10u" style="height: 96px; width: 240px;">
                                     <!--<a href="#registro" onclick="initMap();" id="getLoc" class="button submit">Continuar</a>-->
-                                    <input type="submit" onclick="initMap(); " id="btn_loc" class="button sumit" value="Registrar"/>
+                                    <input type="button" onclick="initMap(); registrar();" id="btn_loc" class="button sumit" value="Registrar"/>
                                 </div>
                             </div>
                         </div>
@@ -380,24 +440,24 @@ $nombres = null;
                         ?>
                     </p>
                     <div class="row">
-                        <button type="button" class="button" onclick="window.open('../SMA/reports/rep_mat_x_mun.php', this.target, 'width=1024px,height=600px');
+                        <button type="button" class="button" onclick="window.open('reports/rep_mat_x_mun.php', this.target, 'width=1024px,height=600px');
                                 return false;">Matriculados y restantes por municipio</button> 
-                        <button type="button" class="button" onclick="window.open('../SMA/reports/rep_nov_total.php', this.target, 'width=1024px,height=600px');
+                        <button type="button" class="button" onclick="window.open('reports/rep_nov_total.php', this.target, 'width=1024px,height=600px');
                                 return false;">Novedades registradas</button> 
-                        <button type="button" class="button" onclick="window.open('../SMA/reports/rep_mat_x_pro.php', this.target, 'width=1024px,height=600px');
+                        <button type="button" class="button" onclick="window.open('reports/rep_mat_x_pro.php', this.target, 'width=1024px,height=600px');
                                 return false;">Matriculados y restantes por programa</button>
                       
-                        <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado1.php', this.target, 'width=1024px,height=600px');
+                        <button type="button" class="button" onclick="window.open('reports/rep_listado1.php', this.target, 'width=1024px,height=600px');
                                 return false;">Listado de matriculados en Civil</button>
-                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado2.php', this.target, 'width=1024px,height=600px');
+                         <button type="button" class="button" onclick="window.open('reports/rep_listado2.php', this.target, 'width=1024px,height=600px');
                                 return false;">Listado de matriculados en Sistemas</button>
-                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado3.php', this.target, 'width=1024px,height=600px');
+                         <button type="button" class="button" onclick="window.open('reports/rep_listado3.php', this.target, 'width=1024px,height=600px');
                                 return false;">Listado de matriculados en Química</button>
-                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado4.php', this.target, 'width=1024px,height=600px');
+                         <button type="button" class="button" onclick="window.open('reports/rep_listado4.php', this.target, 'width=1024px,height=600px');
                                 return false;">Listado de matriculados en Alimentos</button>
-                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado5.php', this.target, 'width=1024px,height=600px');
+                         <button type="button" class="button" onclick="window.open('reports/rep_listado5.php', this.target, 'width=1024px,height=600px');
                                 return false;">Listado de matriculados en Electrónica</button>
-                         <button type="button" class="button" onclick="window.open('../SMA/reports/rep_listado6.php', this.target, 'width=1024px,height=600px');
+                         <button type="button" class="button" onclick="window.open('reports/rep_listado6.php', this.target, 'width=1024px,height=600px');
                                 return false;">Listado de matriculados en Mecánica</button>
                     </div>
                 </div>
